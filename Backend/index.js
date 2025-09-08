@@ -5,6 +5,7 @@ import booksRoute from "./routes/booksRoute.js"
 
 const app = express()
 app.use(express.json()) // Middleware to parse request body
+app.use(cors())
 app.use("/books", booksRoute)
 
 
