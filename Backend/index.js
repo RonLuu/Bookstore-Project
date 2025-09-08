@@ -10,6 +10,7 @@ app.get("/", (req,res) =>{
     console.log(req)
     return res.status(200).send("Welcome to MERN stack")
 })
+
 // Get all books
 app.get("/books", async (req, res) =>{
     try
@@ -19,6 +20,22 @@ app.get("/books", async (req, res) =>{
             count : books.length,
             data: books
         })
+    }
+    catch (error)
+    {
+        console.log(error.message)
+        return res.status(500).send({message: error.message})
+    }
+})
+
+// Get a book by ID
+app.get("/books/:id", async (req, res) =>{
+    try
+    {
+        const {id} = req.params
+        const book = await Book.findById(id)
+
+        return res.status(200).json(book)
     }
     catch (error)
     {
