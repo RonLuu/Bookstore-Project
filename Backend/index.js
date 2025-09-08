@@ -70,7 +70,7 @@ app.post("/books", async (req, res)=>{
     }
 })
 
-// Update a book to the database
+// Update a book by id in the database
 app.put("/books/:id", async (req, res) =>{
     try 
     {
@@ -95,6 +95,26 @@ app.put("/books/:id", async (req, res) =>{
         return res.status(500).send({message: error.message})
     }
 })
+
+// Delete a book by id in the database
+app.delete("/books/:id", async (req, res) =>{
+    try 
+    {
+        const {id} = req.params
+        const book = await Book.findByIdAndDelete(id)
+        if (!book)
+        {
+            return res.status(404).json({message: "Book not found"})
+        }
+        return res.status(200).send({message: "Book deleted successfully"})
+    } 
+    catch (error) 
+    {
+        console.log(error.message)
+        return res.status(500).send({message: error.message})
+    }
+})
+
 mongoose
     .connect(MONGO_DB_URL)
     .then(()=>{
