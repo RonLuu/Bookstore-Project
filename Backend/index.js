@@ -10,7 +10,24 @@ app.get("/", (req,res) =>{
     console.log(req)
     return res.status(200).send("Welcome to MERN stack")
 })
+// Get all books
+app.get("/books", async (req, res) =>{
+    try
+    {
+        const books = await Book.find()
+        return res.status(200).json({
+            count : books.length,
+            data: books
+        })
+    }
+    catch (error)
+    {
+        console.log(error.message)
+        return res.status(500).send({message: error.message})
+    }
+})
 
+// Post a book to the database from the request
 app.post("/books", async (req, res)=>{
     try {
         if (!req.body.title || !req.body.author || !req.body.publishYear)
