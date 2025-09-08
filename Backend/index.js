@@ -70,6 +70,31 @@ app.post("/books", async (req, res)=>{
     }
 })
 
+// Update a book to the database
+app.put("/books/:id", async (req, res) =>{
+    try 
+    {
+        // If the infomation for updating the book is not enough!
+        if (!req.body.author || !req.body.title || !req.body.publishYear) 
+        {
+            return res.status(400).send({
+                message: "Send all the required fields: title, author, publishYear"
+            })
+        }
+        const {id} = req.params
+        const book = await Book.findByIdAndUpdate(id, req.body)
+        if (!book)
+        {
+            return res.status(404).json({message: "Book not found"})
+        }
+        return res.status(200).send({message: "Book updated successfully"})
+    } 
+    catch (error) 
+    {
+        console.log(error.message)
+        return res.status(500).send({message: error.message})
+    }
+})
 mongoose
     .connect(MONGO_DB_URL)
     .then(()=>{
